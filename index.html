@@ -41,30 +41,72 @@
       max-width: 500px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
+    #stats {
+      margin: 2rem 0;
+      background: #fff7f7;
+      padding: 1rem;
+      border-radius: 15px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #easterText {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ff6b6b;
+      margin-top: 2rem;
+      white-space: pre-wrap;
+    }
   </style>
 </head>
-<body>
+<body onload="loadStats()">
   <h1>울림 편지함 ✉️</h1>
+
+  <div id="stats">
+    <p>📬 총 편지 수: <span id="totalCount">0</span></p>
+    <p>👑 가장 많이 받은 사람의 편지 수: <span id="topReceiver"></span></p>
+  </div>
+
   <p>자신의 이름을 입력해 주세요</p>
-  <input type="text" id="nameInput" placeholder="예: 남24김동현">
-  <button onclick="loadLetters()">내 편지 보기</button>
+  <input type="text" id="nameInput" placeholder="예: 남24조장훈">
+  <button onclick="loadMyLetters()">내 편지 보기</button>
 
   <ul id="letterList"></ul>
 
-  <script>
-    const apiUrl = "https://script.google.com/macros/s/AKfycby_Myg8JXRQJc6A3XXN4n7KkGFYMIyszACEQmKmHWAbwtIjvekoVCfMefgETSxw5jzFUA/exec";
+  <div id="easterText"></div>
 
-    function loadLetters() {
-      const name = document.getElementById('nameInput').value.trim();
-      if (!name) {
-        alert('이름을 입력해 주세요');
-        return;
-      }
-      fetch(`${apiUrl}?to=${encodeURIComponent(name)}`)
+  <script>
+    const apiUrl = "https://script.google.com/macros/s/AKfycbxB92cZvEpBtJbyAyIFmFI-5v8reSJqWhbTBFxxOQOyuFE2R8tASdf6bnsmIugM885X_Q/exec";
+
+    function loadStats() {
+      fetch(apiUrl)
         .then(res => res.json())
         .then(data => {
-          const list = document.getElementById('letterList');
-          list.innerHTML = '';
+          document.getElementById('totalCount').textContent = data.total;
+          document.getElementById('topReceiver').textContent = `${data.top.count}개`;
+        });
+    }
+
+    function loadMyLetters() {
+      const name = document.getElementById('nameInput').value.trim();
+      const list = document.getElementById('letterList');
+      const easter = document.getElementById('easterText');
+      list.innerHTML = '';
+      easter.innerHTML = '';
+
+      if (name === "문화기획국화이팅") {
+        let repeatText = "문화기획국화이팅 ";
+        easter.innerHTML = repeatText.repeat(500);
+        return;
+      }
+
+      const isAdmin = name === "울림편지관리자2025";
+      const fetchUrl = isAdmin ? `${apiUrl}?admin=true` : `${apiUrl}?to=${encodeURIComponent(name)}`;
+
+      fetch(fetchUrl)
+        .then(res => res.json())
+        .then(data => {
           if (data.length === 0) {
             list.innerHTML = '<li>편지가 없습니다 😢</li>';
             return;
@@ -74,10 +116,6 @@
             li.innerHTML = `<b>${letter.timestamp}</b><br>${letter.message}`;
             list.appendChild(li);
           });
-        })
-        .catch(err => {
-          alert('편지를 불러오지 못했습니다 😢');
-          console.error(err);
         });
     }
   </script>
