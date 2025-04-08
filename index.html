@@ -101,6 +101,24 @@
         return;
       }
 
+      if (name === "호림반화이팅") {
+        let repeatText = "호림화이팅";
+        easter.innerHTML = repeatText.repeat(10);
+        return;
+      }
+
+      if (name === "호림") {
+        let repeatText = "너무 뻔하네요 ^^";
+        easter.innerHTML = repeatText.repeat(10);
+        return;
+      }
+      
+      if (name === "고려대학교") {
+        let repeatText = "민족 고대";
+        easter.innerHTML = repeatText.repeat(5);
+        return;
+      }
+      
       const isAdmin = name === "울림편지관리자2025";
       const fetchUrl = isAdmin ? `${apiUrl}?admin=true` : `${apiUrl}?to=${encodeURIComponent(name)}`;
 
