@@ -6,13 +6,23 @@
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      background: linear-gradient(to bottom, #ffe6e6, #fff);
+      background: linear-gradient(-45deg, #ffdddd, #fff0f0, #ffe6e6, #ffffff);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
       text-align: center;
       padding: 2rem;
     }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     h1 {
       color: #ff6b6b;
     }
+
     input, button {
       padding: 10px;
       margin: 10px;
@@ -20,19 +30,23 @@
       border: 1px solid #ccc;
       font-size: 16px;
     }
+
     button {
       background-color: #ff6b6b;
       color: white;
       border: none;
       cursor: pointer;
     }
+
     button:hover {
       background-color: #ff4b4b;
     }
+
     ul {
       list-style: none;
       padding: 0;
     }
+
     li {
       background: #fff2f2;
       margin: 10px auto;
@@ -41,6 +55,7 @@
       max-width: 500px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
+
     #stats {
       margin: 2rem 0;
       background: #fff7f7;
@@ -51,12 +66,21 @@
       margin-left: auto;
       margin-right: auto;
     }
+
     #easterText {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: bold;
       color: #ff6b6b;
       margin-top: 2rem;
       white-space: pre-wrap;
+    }
+
+    #easterImage {
+      margin-top: 2rem;
+    }
+
+    #easterImage img {
+      width: 200px;
     }
   </style>
 </head>
@@ -75,6 +99,7 @@
   <ul id="letterList"></ul>
 
   <div id="easterText"></div>
+  <div id="easterImage"></div>
 
   <script>
     const apiUrl = "https://script.google.com/macros/s/AKfycbxB92cZvEpBtJbyAyIFmFI-5v8reSJqWhbTBFxxOQOyuFE2R8tASdf6bnsmIugM885X_Q/exec";
@@ -91,34 +116,26 @@
     function loadMyLetters() {
       const name = document.getElementById('nameInput').value.trim();
       const list = document.getElementById('letterList');
-      const easter = document.getElementById('easterText');
+      const easterText = document.getElementById('easterText');
+      const easterImage = document.getElementById('easterImage');
+
       list.innerHTML = '';
-      easter.innerHTML = '';
+      easterText.innerHTML = '';
+      easterImage.innerHTML = '';
 
+      // 문화기획국화이팅 → 텍스트 500번 출력
       if (name === "문화기획국화이팅") {
-        let repeatText = "문화기획국화이팅 ";
-        easter.innerHTML = repeatText.repeat(500);
+        easterText.innerHTML = "문화기획국화이팅 ".repeat(500);
         return;
       }
 
-      if (name === "호림반화이팅") {
-        let repeatText = "호림화이팅";
-        easter.innerHTML = repeatText.repeat(10);
+      // 호림화이팅 → 이미지 출력
+      if (name === "호림화이팅") {
+        easterImage.innerHTML = `<img src="Tiger.png" alt="호랑이">`;
         return;
       }
 
-      if (name === "호림") {
-        let repeatText = "너무 뻔하네요 ^^";
-        easter.innerHTML = repeatText.repeat(10);
-        return;
-      }
-      
-      if (name === "고려대학교") {
-        let repeatText = "민족 고대";
-        easter.innerHTML = repeatText.repeat(5);
-        return;
-      }
-      
+      // 관리자 권한
       const isAdmin = name === "울림편지관리자2025";
       const fetchUrl = isAdmin ? `${apiUrl}?admin=true` : `${apiUrl}?to=${encodeURIComponent(name)}`;
 
@@ -139,3 +156,4 @@
   </script>
 </body>
 </html>
+
