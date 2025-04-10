@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <title>UllimLetter</title>
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Nanum Pen Script', cursive;
+      font-family: 'Nanum Pen Script', 'Noto Sans KR', cursive;
       font-size: 22px;
       background: linear-gradient(-45deg, #ffcccc, #ffe6e6, #ffeaea, #ffffff);
       background-size: 500% 500%;
@@ -29,15 +30,21 @@
     h1 {
       color: #d24c4c;
       font-size: 3rem;
+      animation: fadeIn 2s ease;
     }
 
-    input, button {
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    input, button, textarea {
       padding: 12px;
       margin: 10px;
       border-radius: 10px;
       border: 1px solid #ccc;
       font-size: 20px;
-      font-family: 'Nanum Pen Script', cursive;
+      font-family: 'Nanum Pen Script', 'Noto Sans KR', cursive;
     }
 
     button {
@@ -64,6 +71,7 @@
       max-width: 500px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
       font-size: 20px;
+      animation: fadeIn 1s ease;
     }
 
     #stats {
@@ -88,15 +96,33 @@
       margin-top: 2rem;
       width: 200px;
     }
+
+    #writeForm {
+      margin-top: 3rem;
+      background: #fffafa;
+      padding: 1rem;
+      border-radius: 15px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 <body onload="loadStats()">
   <h1>울림 편지함 ✉️</h1>
-  <img src="UllimLogo.png" alt="울림 로고" style="width: 120px; margin-bottom: 1.5rem;">
+  <img src="UllimLogo.png" alt="울림 로고" style="width: 160px; margin-bottom: 1.5rem;">
 
   <div id="stats">
     <p>📬 총 편지 수: <span id="totalCount">0</span></p>
     <p>👑 가장 많이 받은 사람의 편지 수: <span id="topReceiver"></span></p>
+  </div>
+
+  <div id="writeForm">
+    <h2>✏️ 편지 쓰기</h2>
+    <input type="text" id="toName" placeholder="받는 사람 이름 (예: 남24김동현)"><br>
+    <textarea id="message" placeholder="편지를 입력하세요" rows="5" cols="40"></textarea><br>
+    <button onclick="submitLetter()">편지 보내기</button>
   </div>
 
   <p>자신의 이름을 입력해 주세요</p>
@@ -108,7 +134,7 @@
   <div id="easterImage"></div>
 
   <script>
-    const apiUrl = "https://script.google.com/macros/s/AKfycbxB92cZvEpBtJbyAyIFmFI-5v8reSJqWhbTBFxxOQOyuFE2R8tASdf6bnsmIugM885X_Q/exec";
+    const apiUrl = "https://script.google.com/macros/s/AKfycbzuBodWMvmTv93t9VT1bwa7Irb5mcI8WPKIo8NUIBmZ3EpmitDNonUsIZebyn__4toKMQ/exec";
 
     function loadStats() {
       fetch(apiUrl)
@@ -134,19 +160,16 @@
         easterText.innerHTML = "문화기획국화이팅 ".repeat(500);
         return;
       }
-
       if (name === "호림화이팅") {
-        easterImage.innerHTML = `<img src="Tiger2.png" alt="호랑이">`;
+        easterImage.innerHTML = `<img src="Tiger2.png" alt="호랑이" style="width: 300px;">`;
         return;
       }
-
       if (name === "고려대학교") {
-        easterImage.innerHTML = `<img src="Tiger.png" alt="호랑이">`;
+        easterImage.innerHTML = `<img src="Tiger.png" alt="호랑이" style="width: 300px;">`;
         return;
       }
-
       if (name === "제작자") {
-        easterImage.innerHTML = `<img src="Fine.jpg" alt="편지">`;
+        easterImage.innerHTML = `<img src="Fine.jpg" alt="편지" style="width: 500px;">`;
         return;
       }
 
@@ -169,7 +192,34 @@
           });
         });
     }
+
+    function submitLetter() {
+      const to = document.getElementById('toName').value.trim();
+      const message = document.getElementById('message').value.trim();
+      if (!to || !message) {
+        alert("모든 내용을 입력해주세요!");
+        return;
+      }
+      fetch(apiUrl, {
+        method: "POST",
+        body: JSON.stringify({ to: to, message: message }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.text())
+      .then(txt => {
+        if (txt === "OK") {
+          alert("편지가 성공적으로 전송되었습니다!");
+          document.getElementById('toName').value = "";
+          document.getElementById('message').value = "";
+        } else {
+          alert("전송 중 오류가 발생했습니다.");
+        }
+      });
+    }
   </script>
 </body>
 </html>
+
 
