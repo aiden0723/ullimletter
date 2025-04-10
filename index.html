@@ -38,7 +38,7 @@
       to { opacity: 1; }
     }
 
-    input, button, textarea {
+    input, button {
       padding: 12px;
       margin: 10px;
       border-radius: 10px;
@@ -96,17 +96,6 @@
       margin-top: 2rem;
       width: 200px;
     }
-
-    #writeForm {
-      margin-top: 3rem;
-      background: #fffafa;
-      padding: 1rem;
-      border-radius: 15px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
   </style>
 </head>
 <body onload="loadStats()">
@@ -118,13 +107,6 @@
     <p>👑 가장 많이 받은 사람의 편지 수: <span id="topReceiver"></span></p>
   </div>
 
-  <div id="writeForm">
-    <h2>✏️ 편지 쓰기</h2>
-    <input type="text" id="toName" placeholder="받는 사람 이름 (예: 남24김동현)"><br>
-    <textarea id="message" placeholder="편지를 입력하세요" rows="5" cols="40"></textarea><br>
-    <button onclick="submitLetter()">편지 보내기</button>
-  </div>
-
   <p>자신의 이름을 입력해 주세요</p>
   <input type="text" id="nameInput" placeholder="예: 남24조장훈">
   <button onclick="loadMyLetters()">내 편지 보기</button>
@@ -134,7 +116,7 @@
   <div id="easterImage"></div>
 
   <script>
-    const apiUrl = "https://script.google.com/macros/s/AKfycbzuBodWMvmTv93t9VT1bwa7Irb5mcI8WPKIo8NUIBmZ3EpmitDNonUsIZebyn__4toKMQ/exec";
+    const apiUrl = "https://script.google.com/macros/s/AKfycbxB92cZvEpBtJbyAyIFmFI-5v8reSJqWhbTBFxxOQOyuFE2R8tASdf6bnsmIugM885X_Q/exec";
 
     function loadStats() {
       fetch(apiUrl)
@@ -192,34 +174,7 @@
           });
         });
     }
-
-    function submitLetter() {
-      const to = document.getElementById('toName').value.trim();
-      const message = document.getElementById('message').value.trim();
-      if (!to || !message) {
-        alert("모든 내용을 입력해주세요!");
-        return;
-      }
-      fetch(apiUrl, {
-        method: "POST",
-        body: JSON.stringify({ to: to, message: message }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then(res => res.text())
-      .then(txt => {
-        if (txt === "OK") {
-          alert("편지가 성공적으로 전송되었습니다!");
-          document.getElementById('toName').value = "";
-          document.getElementById('message').value = "";
-        } else {
-          alert("전송 중 오류가 발생했습니다.");
-        }
-      });
-    }
   </script>
 </body>
 </html>
-
 
