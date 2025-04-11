@@ -116,7 +116,7 @@
   <div id="easterImage"></div>
 
   <script>
-    const apiUrl = "https://script.google.com/macros/s/AKfycby_D4c1tunR8k7h5VhJhTUSFTH7YloFWV4tXrgpxaYbF2jDPWLkbogz1Mu2JgvA0ux7Dg/exec";
+    const apiUrl = "https://script.google.com/macros/s/AKfycbyYgZ0w2atH0jJ3_vcaUIz8t3C9sxcM_q8jvEmHNGsHHS96tz9QS_KNIgvk-9bzMKObBg/exec";
 
     function loadStats() {
       fetch(apiUrl)
@@ -142,8 +142,8 @@
         easterText.innerHTML = "문화기획국화이팅 ".repeat(500);
         return;
       }
-      if (name === "아 기모") {
-        easterText.innerHTML = "좋다 이씨!! ".repeat(500);
+      if (name === "기분이 어때?") {
+        easterText.innerHTML = "아 기모 ".repeat(500);
         return;
       }
       if (name === "호림화이팅") {
@@ -156,6 +156,14 @@
       }
       if (name === "제작자") {
         easterImage.innerHTML = `<img src="Fine.jpg" alt="편지" style="width: 500px;">`;
+        return;
+      }
+      if (name === "역대최고의축구선수") {
+        easterText.innerHTML = "크리스티아누 호날두 ".repeat(500);
+        return;
+      }
+      if (name === "울림화이팅") {
+        easterImage.innerHTML = `<img src="Fine1.jpg" alt="편지1" style="width: 500px;">`;
         return;
       }
 
