@@ -4,9 +4,15 @@
   <meta charset="UTF-8">
   <title>UllimLetter</title>
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
   <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden; /* 좌우 스크롤 방지 */
+    }
     body {
-      font-family: 'Nanum Pen Script', cursive;
+      font-family: 'Nanum Pen Script', 'Noto Sans KR', cursive;
       font-size: 22px;
       background: linear-gradient(-45deg, #ffcccc, #ffe6e6, #ffeaea, #ffffff);
       background-size: 500% 500%;
@@ -24,6 +30,12 @@
 
     body.letter-opened {
       background: url('wood_texture.jpg') center center / cover no-repeat fixed;
+      animation: fadeInBody 1s ease;
+    }
+
+    @keyframes fadeInBody {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     h1 {
@@ -43,7 +55,7 @@
       border-radius: 10px;
       border: 1px solid #ccc;
       font-size: 20px;
-      font-family: 'Nanum Pen Script', cursive;
+      font-family: 'Nanum Pen Script', 'Noto Sans KR', cursive;
     }
 
     button {
@@ -137,7 +149,6 @@
       easterImage.innerHTML = '';
       document.body.classList.remove("letter-opened");
 
-      // 이스터에그 처리
       if (name === "문화기획국화이팅") {
         easterText.innerHTML = "문화기획국화이팅 ".repeat(500);
         return;
@@ -161,15 +172,15 @@
       fetch(fetchUrl)
         .then(res => res.json())
         .then(data => {
-          const letters = data.letters || data;  // 데이터 형식 유연 처리
+          const letters = data.letters || data;
           if (letters.length === 0) {
             list.innerHTML = '<li>편지가 없습니다 😢</li>';
             return;
           }
           document.body.classList.add("letter-opened");
           letters.forEach(letter => {
-            const time = new Date(letter.timestamp).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
             const li = document.createElement('li');
+            const time = new Date(letter.timestamp).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
             li.innerHTML = `<b>${time}</b><br>${letter.message}`;
             list.appendChild(li);
           });
